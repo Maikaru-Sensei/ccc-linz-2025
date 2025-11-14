@@ -5,45 +5,14 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Main {
-    private static Map<Integer, Integer> PACE_TO_SPACE = new HashMap<>();
-    private static Map<Integer, Integer> PACE_TO_TIME = new HashMap<>();
-
     public static void main(String[] args) {
-        String level = "level4";
-        String example = "level4_2_large.in";
-        String outputFileName = "example.out";
-        String outputFilePath = "src/main/resources/" + level + "/" + outputFileName;
-
-
-        PACE_TO_SPACE.put(-1, -1);
-        PACE_TO_SPACE.put(-2, -1);
-        PACE_TO_SPACE.put(-3, -1);
-        PACE_TO_SPACE.put(-4, -1);
-        PACE_TO_SPACE.put(-5, -1);
-        PACE_TO_SPACE.put(0, 0);
-        PACE_TO_SPACE.put(5, 1);
-        PACE_TO_SPACE.put(4, 1);
-        PACE_TO_SPACE.put(3, 1);
-        PACE_TO_SPACE.put(2, 1);
-        PACE_TO_SPACE.put(1, 1);
-
-        PACE_TO_TIME.put(-1, 1);
-        PACE_TO_TIME.put(-2, 2);
-        PACE_TO_TIME.put(-3, 3);
-        PACE_TO_TIME.put(-4, 4);
-        PACE_TO_TIME.put(-5, 5);
-        PACE_TO_TIME.put(0, 1);
-        PACE_TO_TIME.put(5, 5);
-        PACE_TO_TIME.put(4, 4);
-        PACE_TO_TIME.put(3, 3);
-        PACE_TO_TIME.put(2, 2);
-        PACE_TO_TIME.put(1, 1);
-
+        var level = "level4";
+        var example = "level4_2_large.in";
+        var outputFileName = "example.out";
+        var outputFilePath = "src/main/resources/" + level + "/" + outputFileName;
 
         var classLoader = Thread.currentThread().getContextClassLoader();
         var fileUrl = classLoader.getResource(level + "/" + example);
@@ -75,7 +44,7 @@ public class Main {
     }
 
     private static List<String> processLines(List<String> inputLines) {
-        int numberOfLines = Integer.parseInt(inputLines.getFirst());
+        var numberOfLines = Integer.parseInt(inputLines.getFirst());
         var outputLines = new ArrayList<String>();
 
         for (int i = 1; i <= numberOfLines; i++) {
@@ -83,9 +52,9 @@ public class Main {
 
             var locationAndTime = line.split(" ");
 
-            int locationX = Integer.parseInt(locationAndTime[0].split(",")[0]);
-            int locationY = Integer.parseInt(locationAndTime[0].split(",")[1]);
-            int time = Integer.parseInt(locationAndTime[1]);
+            var locationX = Integer.parseInt(locationAndTime[0].split(",")[0]);
+            var locationY = Integer.parseInt(locationAndTime[0].split(",")[1]);
+            var time = Integer.parseInt(locationAndTime[1]);
             var xSequence = handleLocation(locationX, time);
             var ySequence = handleLocation(locationY, time);
 
@@ -114,7 +83,7 @@ public class Main {
         if (location % 2 == 0) {
             for (int i = location * modifier; i >= 2; i -= 2) {
                 if (startPace == 0) {
-                    for (int j = i; j >= 1 ; j--) {
+                    for (int j = i; j >= 1; j--) {
                         sequence += " " + lastPace * modifier;
                     }
 
@@ -134,7 +103,7 @@ public class Main {
         } else {
             for (int i = location * modifier; i >= 1; i -= 2) {
                 if (startPace == 0) {
-                    for (int j = i; j >= 0 ; j--) {
+                    for (int j = i; j >= 0; j--) {
                         sequence += " " + lastPace * modifier;
                     }
 
