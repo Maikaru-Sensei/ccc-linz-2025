@@ -10,7 +10,8 @@ public class Main {
     public static void main(String[] args) {
         String level = "level1";
         String example = "level1_1.in";
-        String outputFile = "level1_1.out";
+        String outputFileName = "level1_1.out";
+        String outputFilePath = "src/main/resources/" + level + "/" + outputFileName;
 
         var classLoader = Thread.currentThread().getContextClassLoader();
         var fileUrl = classLoader.getResource(level + "/" + example);
@@ -31,7 +32,7 @@ public class Main {
 
         List<String> output = processLines(inputLines);
 
-        try (PrintWriter writer = new PrintWriter(outputFile)) {
+        try (PrintWriter writer = new PrintWriter(outputFilePath)) {
             for (String line : output) {
                 writer.println(line);
             }
