@@ -1,0 +1,1 @@
+rootProject.name = "ccc-linz-2025"
