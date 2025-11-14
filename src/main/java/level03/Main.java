@@ -10,38 +10,39 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
+    private static Map<Integer, Integer> PACE_TO_SPACE = new HashMap<>();
+    private static Map<Integer, Integer> PACE_TO_TIME = new HashMap<>();
+
     public static void main(String[] args) {
-        String level = "level2";
-        String example = "level2_2_large.in";
-        String outputFileName = "level2_2_large.out";
+        String level = "level3";
+        String example = "level3_2_large.in";
+        String outputFileName = "example.out";
         String outputFilePath = "src/main/resources/" + level + "/" + outputFileName;
 
-        Map<Integer, Integer> paceToSpace = new HashMap<>();
-        paceToSpace.put(-1, -1);
-        paceToSpace.put(-2, -1);
-        paceToSpace.put(-3, -1);
-        paceToSpace.put(-4, -1);
-        paceToSpace.put(-5, -1);
-        paceToSpace.put(0, 0);
-        paceToSpace.put(5, 1);
-        paceToSpace.put(4, 1);
-        paceToSpace.put(3, 1);
-        paceToSpace.put(2, 1);
-        paceToSpace.put(1, 1);
 
-        Map<Integer, Integer> paceToTime = new HashMap<>();
-        paceToTime.put(-1, 1);
-        paceToTime.put(-2, 2);
-        paceToTime.put(-3, 3);
-        paceToTime.put(-4, 4);
-        paceToTime.put(-5, 5);
-        paceToTime.put(0, 1);
-        paceToTime.put(5, 5);
-        paceToTime.put(4, 4);
-        paceToTime.put(3, 3);
-        paceToTime.put(2, 2);
-        paceToTime.put(1, 1);
+        PACE_TO_SPACE.put(-1, -1);
+        PACE_TO_SPACE.put(-2, -1);
+        PACE_TO_SPACE.put(-3, -1);
+        PACE_TO_SPACE.put(-4, -1);
+        PACE_TO_SPACE.put(-5, -1);
+        PACE_TO_SPACE.put(0, 0);
+        PACE_TO_SPACE.put(5, 1);
+        PACE_TO_SPACE.put(4, 1);
+        PACE_TO_SPACE.put(3, 1);
+        PACE_TO_SPACE.put(2, 1);
+        PACE_TO_SPACE.put(1, 1);
 
+        PACE_TO_TIME.put(-1, 1);
+        PACE_TO_TIME.put(-2, 2);
+        PACE_TO_TIME.put(-3, 3);
+        PACE_TO_TIME.put(-4, 4);
+        PACE_TO_TIME.put(-5, 5);
+        PACE_TO_TIME.put(0, 1);
+        PACE_TO_TIME.put(5, 5);
+        PACE_TO_TIME.put(4, 4);
+        PACE_TO_TIME.put(3, 3);
+        PACE_TO_TIME.put(2, 2);
+        PACE_TO_TIME.put(1, 1);
 
 
         var classLoader = Thread.currentThread().getContextClassLoader();
@@ -73,44 +74,154 @@ public class Main {
         }
     }
 
-    // Adjust this to your actual implementation
     private static List<String> processLines(List<String> inputLines) {
-       int numberOfLines = Integer.parseInt(inputLines.getFirst());
-       var outputLines = new ArrayList<String>();
+        int numberOfLines = Integer.parseInt(inputLines.getFirst());
+        var outputLines = new ArrayList<String>();
 
-       for (int i = 1; i <= numberOfLines; i++) {
-           var line = inputLines.get(i);
+        for (int i = 1; i <= numberOfLines; i++) {
+            var line = inputLines.get(i);
 
-           var paces = line.split(" ");
+            var locationAndTime = line.split(" ");
 
-           int spaceMoved = 0;
-           int timeMoved = 0;
+            int location = Integer.parseInt(locationAndTime[0]);
+            int time = Integer.parseInt(locationAndTime[1]);
+            var sequence = "0";
 
-           for (String pace : paces) {
-               int unitOfSpace = Integer.parseInt(pace);
-               int unitOfTime = unitOfSpace;
+            if (location > 0) {
+                sequence = handlePositiveLocation(location, time, sequence);
+            } else if (location < 0) {
+                sequence = handleNegativeLocation(location, time, sequence);
+            }
 
-               if (unitOfSpace > 0) {
-                   unitOfSpace = 1;
-               } else if (unitOfSpace < 0) {
-                   unitOfSpace = -1;
-               }
 
-               spaceMoved += unitOfSpace;
+            sequence += " 0";
 
-               if (unitOfTime < 0) {
-                   unitOfTime *= -1;
-               }
-               if (unitOfTime == 0) {
-                   unitOfTime = 1;
-               }
+            outputLines.add(sequence);
+        }
 
-               timeMoved += unitOfTime;
-           }
+        return outputLines;
+    }
 
-           outputLines.add(spaceMoved + " " + timeMoved);
-       }
+    private static String handleNegativeLocation(int location, int time, String sequence) {
+        location *= -1;
+        int maxSteps = time / 5;
+        if (maxSteps > location) {
+            for (int i = 1; i <= location; i++) {
+                sequence += " -5";
+            }
+        } else {
+            sequence += " -5";
+            location -= 2;
+            time = time - 10;
 
-       return outputLines;
+            maxSteps = time / 4;
+            if (maxSteps > location) {
+                for (int i = 1; i <= location; i++) {
+                    sequence += " -4";
+                }
+            } else {
+                sequence += " -4";
+                location -= 2;
+                time = time - 8;
+
+                maxSteps = time / 3;
+                if (maxSteps > location) {
+                    for (int i = 1; i <= location; i++) {
+                        sequence += " -3";
+                    }
+                } else {
+                    sequence += " -3";
+                    location -= 2;
+                    time = time - 6;
+
+                    maxSteps = time / 2;
+                    if (maxSteps > location) {
+                        for (int i = 1; i <= location; i++) {
+                            sequence += " -2";
+                        }
+                    } else {
+                        sequence += " -2";
+                        time = time - 4;
+
+                        maxSteps = time;
+
+                        for (int i = 0; i < maxSteps; i++) {
+                            sequence += " -1";
+                        }
+
+                        sequence += " -2";
+                    }
+
+                    sequence += " -3";
+                }
+
+                sequence += " -4";
+            }
+
+            sequence += " -5";
+        }
+
+        return sequence;
+    }
+
+    private static String handlePositiveLocation(int location, int time, String sequence) {
+        int maxSteps = time / 5;
+        if (maxSteps > location) {
+            for (int i = 1; i <= location; i++) {
+                sequence += " 5";
+            }
+        } else {
+            sequence += " 5";
+            location -= 2;
+            time = time - 10;
+
+            maxSteps = time / 4;
+            if (maxSteps > location) {
+                for (int i = 1; i <= location; i++) {
+                    sequence += " 4";
+                }
+            } else {
+                sequence += " 4";
+                location -= 2;
+                time = time - 8;
+
+                maxSteps = time / 3;
+                if (maxSteps > location) {
+                    for (int i = 1; i <= location; i++) {
+                        sequence += " 3";
+                    }
+                } else {
+                    sequence += " 3";
+                    location -= 2;
+                    time = time - 6;
+
+                    maxSteps = time / 2;
+                    if (maxSteps > location) {
+                        for (int i = 1; i <= location; i++) {
+                            sequence += " 2";
+                        }
+                    } else {
+                        sequence += " 2";
+                        time = time - 4;
+
+                        maxSteps = time;
+
+                        for (int i = 0; i < maxSteps; i++) {
+                            sequence += " 1";
+                        }
+
+                        sequence += " 2";
+                    }
+
+                    sequence += " 3";
+                }
+
+                sequence += " 4";
+            }
+
+            sequence += " 5";
+        }
+
+        return sequence;
     }
 }
