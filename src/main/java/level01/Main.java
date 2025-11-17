@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         String level = "level1";
-        String example = "level1_1.in";
+        String example = "level1_0_example.in";
         String outputFileName = "level1_1.out";
         String outputFilePath = "src/main/resources/" + level + "/" + outputFileName;
 
@@ -44,7 +45,23 @@ public class Main {
 
     // Adjust this to your actual implementation
     private static List<String> processLines(List<String> inputLines) {
-        // TODO: implement your logic here
-        return inputLines;
+       int numberOfLines = Integer.parseInt(inputLines.getFirst());
+       var outputLines = new ArrayList<String>();
+
+       for (int i = 1; i <= numberOfLines; i++) {
+           var line = inputLines.get(i);
+
+           var numbers = line.split(" ");
+
+           var sum = 0;
+
+           for (String number : numbers) {
+               sum += Integer.parseInt(number);
+           }
+
+           outputLines.add(sum + "");
+       }
+
+       return outputLines;
     }
 }
